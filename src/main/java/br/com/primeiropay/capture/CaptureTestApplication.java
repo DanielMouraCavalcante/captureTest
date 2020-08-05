@@ -13,8 +13,10 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import io.vertx.serviceproxy.ServiceBinder;
+import java.util.logging.Logger;
 
 public class CaptureTestApplication extends AbstractVerticle {
+	private Logger logger = Logger.getLogger(CaptureTestApplication.class.getName());
 
 	HttpServer server;
 	ServiceBinder serviceBinder;
@@ -22,30 +24,39 @@ public class CaptureTestApplication extends AbstractVerticle {
 	MessageConsumer<JsonObject> consumer;
 
 	private void startCaptureService() {
+		logger.info("startPreAuthorizationService");
 		serviceBinder = new ServiceBinder(vertx);
 
 		CaptureService captureService = CaptureService.create();
 		consumer = serviceBinder
 				.setAddress("transactions_manager.capture")
 				.register(CaptureService.class, captureService);
+		logger.info("startPreAuthorizationService");
 	}
 
 	private Future<Void> startHttpServer() {
+		logger.info("startHttpServer");
 		Promise<Void> promise = Promise.promise();
 		OpenAPI3RouterFactory.create(this.vertx, "/openapi.json", openAPI3RouterFactoryAsyncResult -> {
 			if (openAPI3RouterFactoryAsyncResult.succeeded()) {
+				logger.info("openAPI3RouterFactoryAsyncResult.succeeded");
 				OpenAPI3RouterFactory routerFactory = openAPI3RouterFactoryAsyncResult.result();
 
 				routerFactory.mountServicesFromExtensions();
 
 				Router router = routerFactory.getRouter();
+				logger.info("PORT: " + ApplicationProperties.getProperty("server.port"));
 				server = vertx.createHttpServer(new HttpServerOptions().setPort
-						(Integer.parseInt(ApplicationProperties.getProperty("server.port"))).setHost("localhost"));
+						(Integer.parseInt(ApplicationProperties.getProperty("server.port"))));
 				server.requestHandler(router).listen(ar -> {
 					if (ar.succeeded()) promise.complete();
-					else promise.fail(ar.cause());
+					else {
+						logger.info("promise.fail(ar.cause()");
+						promise.fail(ar.cause());
+					}
 				});
 			} else {
+				logger.info("promise.fail");
 				promise.fail(openAPI3RouterFactoryAsyncResult.cause());
 			}
 		});

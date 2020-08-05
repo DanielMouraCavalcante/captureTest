@@ -12,8 +12,7 @@ public class ApplicationProperties {
     }
 
     static {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "application.properties";
+        String appConfigPath = "classes/application.properties";
         appProps = new Properties();
         try {
             appProps.load(new FileInputStream(appConfigPath));
