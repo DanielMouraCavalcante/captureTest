@@ -1,0 +1,11 @@
+FROM vertx/vertx3
+COPY ./target/captureTest.jar /usr/app/
+COPY ./target/classes /usr/app/classes
+COPY ./target/lib /usr/app/lib
+COPY ./target/classes /usr/app
+COPY ./target/lib /usr/app
+WORKDIR /usr/app
+EXPOSE 8081
+ENTRYPOINT ["sh", "-c"]
+ENV CLASSPATH "/usr/app/lib/lombok-1.18.12.jar:/usr/app/lib/snakeyaml-1.26.jar:/usr/app/lib/slf4j-api-1.7.30.jar:/usr/app/lib/vertx-core-3.9.2.jar:/usr/app/lib/netty-common-4.1.51.Final.jar:/usr/app/lib/netty-buffer-4.1.51.Final.jar:/usr/app/lib/netty-transport-4.1.51.Final.jar:/usr/app/lib/netty-handler-4.1.51.Final.jar:/usr/app/lib/netty-codec-4.1.51.Final.jar:/usr/app/lib/netty-handler-proxy-4.1.51.Final.jar:/usr/app/lib/netty-codec-socks-4.1.51.Final.jar:/usr/app/lib/netty-codec-http-4.1.51.Final.jar:/usr/app/lib/netty-codec-http2-4.1.51.Final.jar:/usr/app/lib/netty-resolver-4.1.51.Final.jar:/usr/app/lib/netty-resolver-dns-4.1.51.Final.jar:/usr/app/lib/netty-codec-dns-4.1.51.Final.jar lib/jackson-core-2.11.1.jar:/usr/app/lib/jackson-databind-2.11.1.jar:/usr/app/lib/jackson-annotations-2.11.1.jar:/usr/app/lib/vertx-service-proxy-3.9.2.jar:/usr/app/lib/vertx-web-api-contract-3.9.2.jar:/usr/app/lib/json-schema-validator-1.0.31.jar:/usr/app/lib/commons-lang3-3.10.jar:/usr/app/lib/swagger-parser-v3-2.0.14.jar:/usr/app/lib/swagger-models-2.0.9.jar:/usr/app/lib/swagger-core-2.0.9.jar:/usr/app/lib/jaxb-api-2.3.1.jar:/usr/app/lib/javax.activation-api-1.2.0.jar:/usr/app/lib/jackson-datatype-jsr310-2.11.1.jar:/usr/app/lib/swagger-annotations-2.0.9.jar:/usr/app/lib/validation-api-2.0.1.Final.jar:/usr/app/lib/swagger-parser-core-2.0.14.jar:/usr/app/lib/commons-io-2.4.jar:/usr/app/lib/jackson-dataformat-yaml-2.11.1.jar:/usr/app/lib/vertx-web-api-service-3.9.2.jar:/usr/app/lib/vertx-web-3.9.2.jar:/usr/app/lib/vertx-web-common-3.9.2.jar:/usr/app/lib/vertx-auth-common-3.9.2.jar:/usr/app/lib/vertx-bridge-common-3.9.2.jar:/usr/app/lib/vertx-codegen-3.9.2-processor.jar:/usr/app/lib/mvel2-2.3.1.Final.jar:/usr/app/lib/vertx-web-client-3.9.2.jar:/usr/app/lib/gson-2.8.5.jar:"
+CMD ["exec vertx run br.com.primeiropay.capture.CaptureTestApplication -cp /usr/app/*"]
